@@ -10,7 +10,6 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/vo"
 	"github.com/tidwall/gjson"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -26,7 +25,6 @@ var cmdConfigFile = flag.String("config", "", "config file path")
 
 func init() {
 	flag.Parse()
-	log.Println("init ares config...")
 
 	configFile := *cmdConfigFile
 
@@ -42,23 +40,16 @@ func init() {
 		configFile = "config.json"
 	}
 
-	log.Println("ARES_CONFIG_FILE:", configFile)
-
-	log.Println("load configFile:", configFile)
 	local := readFile(configFile)
-	log.Println("load configFile:success")
 	conf = config{
 		local: local,
 	}
-	log.Println("localConfig:", local.Raw)
 	if local.Get("nacos.serverConfigs").Exists() && local.Get("nacos.dataId").Exists() {
 		initNacos(local)
 	}
-	log.Println("ares config is ready")
 }
 
 func initNacos(local *gjson.Result) {
-	log.Println("load nacos config...")
 	serverConfigList := arraylist.New()
 	nacosServerConfigs := local.Get("nacos.serverConfigs").Array()
 	for _, serverConfig := range nacosServerConfigs {
@@ -87,7 +78,6 @@ func initNacos(local *gjson.Result) {
 
 	nacosConfigClient, err := clients.CreateConfigClient(properties)
 	if err != nil {
-		log.Fatalln("connect nacos error ", err.Error())
 		os.Exit(1)
 	}
 	conf.nacosClient = nacosConfigClient
@@ -96,14 +86,10 @@ func initNacos(local *gjson.Result) {
 		Group:  local.Get("nacos.group").String(),
 	})
 	if err != nil {
-		log.Fatalln("get nacos config error ", err.Error())
 		os.Exit(1)
 	}
-	log.Println("nacos config:", nacosConfig)
-
 	conf.nacos = readString(nacosConfig)
 
-	log.Println("register nacos config listener...")
 	conf.nacosClient.ListenConfig(vo.ConfigParam{
 		DataId: local.Get("nacos.dataId").String(),
 		Group:  local.Get("nacos.group").String(),
@@ -111,8 +97,6 @@ func initNacos(local *gjson.Result) {
 			conf.nacos = readString(data)
 		},
 	})
-
-	log.Println("register nacos config listener success")
 }
 
 func readFile(path string) *gjson.Result {

@@ -10,7 +10,6 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/model"
 	"github.com/nacos-group/nacos-sdk-go/vo"
 	"github.com/swift9/ares-nacos/config"
-	"log"
 	"os"
 )
 
@@ -46,11 +45,8 @@ func init() {
 	namingClient, _ = clients.CreateNamingClient(properties)
 
 	if namingClient == nil {
-		log.Println("load namingClient error")
 		os.Exit(1)
 	}
-
-	log.Println("create nacos naming client finished")
 }
 
 /* 注册服务 */
