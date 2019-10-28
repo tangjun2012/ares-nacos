@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"flag"
 	"github.com/emirpasic/gods/lists/arraylist"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/clients/config_client"
@@ -11,6 +10,7 @@ import (
 	"github.com/tidwall/gjson"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 type config struct {
@@ -21,21 +21,23 @@ type config struct {
 
 var conf config
 
-var cmdConfigFile = flag.String("config", "", "config file path")
-
 func init() {
-	flag.Parse()
-
-	configFile := *cmdConfigFile
-
-	if configFile == "" {
-		configFile = os.Getenv("ARES_CONFIG_FILE")
+	configFile := ""
+	for _, arg := range os.Args {
+		if strings.HasPrefix(arg, "config=") ||
+			strings.HasPrefix(arg, "-config=") ||
+			strings.HasPrefix(arg, "--config=") {
+			configFile = strings.Split(arg, "=")[1]
+		}
 	}
 
 	if configFile == "" {
 		configFile = os.Getenv("ARES_CONFIG_FILE")
 	}
 
+	if configFile == "" {
+		configFile = os.Getenv("ARES_CONFIG_FILE")
+	}
 	if configFile == "" {
 		configFile = "config.json"
 	}
@@ -99,14 +101,19 @@ func initNacos(local *gjson.Result) {
 	})
 }
 
+func emptyConfig() *gjson.Result {
+	result := gjson.Parse("{}")
+	return &result
+}
+
 func readFile(path string) *gjson.Result {
 	fh, err := os.Open(path)
 	if err != nil {
-		return nil
+		return emptyConfig()
 	}
 	bytes, err := ioutil.ReadAll(fh)
 	if err != nil {
-		return nil
+		return emptyConfig()
 	}
 	result := gjson.Parse(string(bytes[:]))
 	return &result
