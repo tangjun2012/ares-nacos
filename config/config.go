@@ -69,10 +69,10 @@ func initNacos(local *gjson.Result) {
 		"serverConfigs": serverConfigs,
 		"clientConfig": constant.ClientConfig{
 			TimeoutMs:            10 * 1000, //http请求超时时间，单位毫秒
-			ListenInterval:       15 * 1000, //监听间隔时间，单位毫秒（仅在ConfigClient中有效）
+			ListenInterval:       30 * 1000, //监听间隔时间，单位毫秒（仅在ConfigClient中有效）
 			BeatInterval:         15 * 1000, //心跳间隔时间，单位毫秒（仅在ServiceClient中有效）
 			NamespaceId:          local.Get("nacos.namespaceId").String(),
-			UpdateThreadNum:      20,   //更新服务的线程数
+			UpdateThreadNum:      2,    //更新服务的线程数
 			NotLoadCacheAtStart:  true, //在启动时不读取本地缓存数据，true--不读取，false--读取
 			UpdateCacheWhenEmpty: true, //当服务列表为空时是否更新本地缓存，true--更新,false--不更新
 		},
