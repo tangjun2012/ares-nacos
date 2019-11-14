@@ -3,10 +3,10 @@ package config
 import (
 	"encoding/json"
 	"github.com/emirpasic/gods/lists/arraylist"
-	"github.com/nacos-group/nacos-sdk-go/clients"
-	"github.com/nacos-group/nacos-sdk-go/clients/config_client"
-	"github.com/nacos-group/nacos-sdk-go/common/constant"
-	"github.com/nacos-group/nacos-sdk-go/vo"
+	"github.com/swift9/nacos-sdk-go/clients"
+	"github.com/swift9/nacos-sdk-go/clients/config_client"
+	"github.com/swift9/nacos-sdk-go/common/constant"
+	"github.com/swift9/nacos-sdk-go/vo"
 	"github.com/tidwall/gjson"
 	"io/ioutil"
 	"os"
@@ -68,9 +68,9 @@ func initNacos(local *gjson.Result) {
 	properties := map[string]interface{}{
 		"serverConfigs": serverConfigs,
 		"clientConfig": constant.ClientConfig{
-			TimeoutMs:            10 * 1000, //http请求超时时间，单位毫秒
+			TimeoutMs:            60 * 1000, //http请求超时时间，单位毫秒
 			ListenInterval:       30 * 1000, //监听间隔时间，单位毫秒（仅在ConfigClient中有效）
-			BeatInterval:         15 * 1000, //心跳间隔时间，单位毫秒（仅在ServiceClient中有效）
+			BeatInterval:         30 * 1000, //心跳间隔时间，单位毫秒（仅在ServiceClient中有效）
 			NamespaceId:          local.Get("nacos.namespaceId").String(),
 			UpdateThreadNum:      2,    //更新服务的线程数
 			NotLoadCacheAtStart:  true, //在启动时不读取本地缓存数据，true--不读取，false--读取
