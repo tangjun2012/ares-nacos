@@ -1,5 +1,9 @@
 {
   "test": "test",
+  "a": {
+    "b": "${test}ab",
+    "c": "${ a.b }a.b.c"
+  },
   "nacos": {
     "dataId": "test",
     "group": "DEFAULT_GROUP",

@@ -10,6 +10,7 @@ import (
 	"github.com/tidwall/gjson"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -163,7 +164,7 @@ func GetArrayInt64(name string) []int64 {
 func convertResult2ArrayString(result gjson.Result) []string {
 	var arrayStrings []string
 	for _, result := range result.Array() {
-		arrayStrings = append(arrayStrings, result.String())
+		arrayStrings = append(arrayStrings, GetValue(result.String()))
 	}
 	return arrayStrings
 }
@@ -194,13 +195,13 @@ func convertResult2Struct(result gjson.Result, dst interface{}) error {
 
 func GetString(name string, defaultValues ...string) string {
 	if conf.nacos != nil && conf.nacos.Get(name).Exists() {
-		return conf.nacos.Get(name).String()
+		return GetValue(conf.nacos.Get(name).String())
 	}
 	if conf.local.Get(name).Exists() {
-		return conf.local.Get(name).String()
+		return GetValue(conf.local.Get(name).String())
 	}
 	if len(defaultValues) > 0 {
-		return defaultValues[0]
+		return GetValue(defaultValues[0])
 	}
 	return ""
 }
@@ -239,4 +240,13 @@ func GetInt(name string, defaultValues ...int) int {
 		val = GetInt64(name)
 	}
 	return int(val)
+}
+
+func GetValue(val string) string {
+	reg := regexp.MustCompile(`\$\{(\s+)?(\S)+(\s+)?\}`)
+	ps := reg.FindAllString(val, -1)
+	for _, p := range ps {
+		val = strings.ReplaceAll(val, p, GetString(regexp.MustCompile(`(\w+(\.)?)+`).FindString(p), ""))
+	}
+	return val
 }
