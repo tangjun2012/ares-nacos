@@ -194,9 +194,14 @@ func convertResult2Struct(result gjson.Result, dst interface{}) error {
 }
 
 func GetString(name string, defaultValues ...string) string {
+	if os.Getenv(name) != "" {
+		return GetValue(os.Getenv(name))
+	}
+
 	if conf.nacos != nil && conf.nacos.Get(name).Exists() {
 		return GetValue(conf.nacos.Get(name).String())
 	}
+
 	if conf.local.Get(name).Exists() {
 		return GetValue(conf.local.Get(name).String())
 	}
