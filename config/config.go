@@ -37,9 +37,6 @@ func init() {
 	}
 
 	if configFile == "" {
-		configFile = os.Getenv("ARES_CONFIG_FILE")
-	}
-	if configFile == "" {
 		configFile = "config.json"
 	}
 
