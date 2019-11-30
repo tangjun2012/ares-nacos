@@ -177,13 +177,13 @@ func convertResult2ArrayInt64(result gjson.Result) []int64 {
 	return arrayStrings
 }
 
-func getStruct(name string, dst interface{}) error {
+func GetStruct(name string, dst interface{}) error {
 	if conf.nacos != nil {
-		if result := conf.nacos.Get(name); result.Exists() && result.IsArray() {
+		if result := conf.nacos.Get(name); result.Exists() {
 			return convertResult2Struct(result, &dst)
 		}
 	}
-	if result := conf.local.Get(name); result.Exists() && result.IsArray() {
+	if result := conf.local.Get(name); result.Exists() {
 		return convertResult2Struct(result, &dst)
 	}
 	return nil
