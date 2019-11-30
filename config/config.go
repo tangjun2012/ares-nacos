@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"github.com/emirpasic/gods/lists/arraylist"
+	event "github.com/swift9/ares-event"
 	"github.com/swift9/nacos-sdk-go/clients"
 	"github.com/swift9/nacos-sdk-go/clients/config_client"
 	"github.com/swift9/nacos-sdk-go/common/constant"
@@ -15,6 +16,7 @@ import (
 )
 
 type config struct {
+	event.Emitter
 	local       *gjson.Result
 	nacos       *gjson.Result
 	nacosClient config_client.IConfigClient
@@ -95,6 +97,7 @@ func initNacos(local *gjson.Result) {
 		Group:  local.Get("nacos.group").String(),
 		OnChange: func(namespace, group, dataId, data string) {
 			conf.nacos = readString(data)
+			conf.Emit("change")
 		},
 	})
 }
