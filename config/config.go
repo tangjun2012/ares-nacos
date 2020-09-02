@@ -24,7 +24,8 @@ type config struct {
 
 var conf config
 
-func init() {
+//基于本地文件初始化配置
+func initByLocal() {
 	configFile := ""
 	for _, arg := range os.Args {
 		if strings.HasPrefix(arg, "config=") ||
