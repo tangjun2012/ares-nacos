@@ -12,7 +12,6 @@ func TestEnv(t *testing.T) {
 }
 
 func TestConfig(t *testing.T) {
-	config.InitByLocal()
 	println(config.GetString("test"))
 }
 

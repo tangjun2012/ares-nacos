@@ -13,6 +13,10 @@ type localEnv struct {
 
 var env *localEnv
 
+func init() {
+	loadEnv()
+}
+
 func (l *localEnv) Get(key string) string {
 	if l.local == nil {
 		return ""
