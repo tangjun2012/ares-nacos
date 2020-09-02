@@ -94,10 +94,6 @@ func loadEnv() {
 	return
 }
 
-func init() {
-	loadEnv()
-}
-
 func GetLocal() *localEnv {
 	return env
 }

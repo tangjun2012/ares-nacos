@@ -25,7 +25,7 @@ type config struct {
 var conf config
 
 //基于本地文件初始化配置
-func initByLocal() {
+func InitByLocal() {
 	configFile := ""
 	for _, arg := range os.Args {
 		if strings.HasPrefix(arg, "config=") ||
@@ -49,6 +49,16 @@ func initByLocal() {
 	}
 	if local.Get("nacos.serverConfigs").Exists() && local.Get("nacos.dataId").Exists() {
 		initNacos(local)
+	}
+}
+
+//基于json字符串初始化
+func InitByJson(data *gjson.Result) {
+	conf = config{
+		local: data,
+	}
+	if data.Get("nacos.serverConfigs").Exists() && data.Get("nacos.dataId").Exists() {
+		initNacos(data)
 	}
 }
 
@@ -101,6 +111,7 @@ func initNacos(local *gjson.Result) {
 			conf.Emit("change")
 		},
 	})
+	loadEnv()
 }
 
 func emptyConfig() *gjson.Result {

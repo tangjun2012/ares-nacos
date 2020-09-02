@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/emirpasic/gods/lists/arraylist"
-	"github.com/swift9/ares-nacos/config"
 	"github.com/swift9/nacos-sdk-go/clients"
 	"github.com/swift9/nacos-sdk-go/clients/naming_client"
 	"github.com/swift9/nacos-sdk-go/common/constant"
 	"github.com/swift9/nacos-sdk-go/model"
 	"github.com/swift9/nacos-sdk-go/vo"
+	"github.com/tangjun2012/ares-nacos/config"
 	"os"
 )
 

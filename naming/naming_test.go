@@ -1,7 +1,7 @@
 package naming_test
 
 import (
-	"github.com/swift9/ares-nacos/naming"
+	"github.com/tangjun2012/ares-nacos/naming"
 	"testing"
 )
 

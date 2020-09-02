@@ -1,4 +1,4 @@
-module github.com/swift9/ares-nacos
+module github.com/tangjun2012/ares-nacos
 
 go 1.12
 
